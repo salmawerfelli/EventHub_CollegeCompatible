@@ -16,7 +16,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.compose.*
 import com.example.eventhub.ui.EventHubViewModel
 import com.example.eventhub.ui.screens.*
-
+import com.example.eventhub.ui.screens.WelcomeScreen
 @Composable
 fun EventHubApp() {
     val application = LocalContext.current.applicationContext as Application
@@ -40,9 +40,36 @@ fun EventHubApp() {
         } else {
             NavHost(
                 navController = navController,
-                startDestination = "home",
+                startDestination = "welcome",
                 modifier = Modifier.padding(padding)
             ) {
+                composable("welcome") {
+                    WelcomeScreen(
+                        onBrowseEvents = {
+                            navController.navigate("events")
+                        },
+                        onAboutEvents = {
+                            navController.navigate("about")
+                        },
+                        onHelp = {
+                            navController.navigate("help")
+                        }
+                    )
+                }
+
+                composable("help") {
+                    HelpScreen(
+                        onBack = { navController.popBackStack() }
+                    )
+                }
+
+                composable("about") {
+                    AboutScreen(
+                        onBack = { navController.popBackStack() }
+                    )
+                }
+
+
                 composable("home") {
                     HomeScreen(
                         events = state.events,
@@ -86,6 +113,8 @@ fun EventHubApp() {
                             categoryName = categoryName,
                             onBack = { navController.popBackStack() }
                         )
+
+
                     }
                 }
             }
